@@ -11,7 +11,10 @@ try{
             $query = "SELECT * FROM users WHERE username =:username AND password =:password";
             $statement = $conn -> prepare($query);
             $statement -> execute(
-
+                array(
+                    'username' => $_POST["username"],
+                    'password' => $_POST["password"]
+                )
             );
             $count = $statement -> rowCount();
             if($count == 1){
@@ -25,4 +28,5 @@ try{
 } catch(PDOException $error){
     $message = $error -> getMessage();
 }
+header("location:./admin/index.php");
 ?>
