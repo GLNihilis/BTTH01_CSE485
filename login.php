@@ -52,22 +52,16 @@
                         </div>
                     </div>
 
-                    <?php
-                        if(isset($_GET['error'])){
-                            echo "<h2 style='color:red'>{$_GET['error']}</h2>";
-                        }
-                    ?>
-
                     <div class="card-body">
                         <form action="authecation.php" method="post">
                             <div class="input-group mb-3">
-                                <span class="input-group-text" id="txtUser"><i class="fas fa-user"></i></span>
-                                <input type="text" class="form-control" placeholder="username" >
+                                <span class="input-group-text" id="txtUser" ><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" placeholder="username" name ="username">
                             </div>
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="txtPass"><i class="fas fa-key"></i></span>
-                                <input type="text" class="form-control" placeholder="password" >
+                                <input type="text" class="form-control" placeholder="password" name ="password">
                             </div>
                             
                             <div class="row align-items-center remember">
