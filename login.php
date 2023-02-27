@@ -51,8 +51,15 @@
                             <span><i class="fab fa-twitter-square"></i></span>
                         </div>
                     </div>
+
+                    <?php
+                        if(isset($_GET['error'])){
+                            echo "<h2 style='color:red'>{$_GET['error']}</h2>";
+                        }
+                    ?>
+
                     <div class="card-body">
-                        <form>
+                        <form action="authecation.php" method="post">
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="txtUser"><i class="fas fa-user"></i></span>
                                 <input type="text" class="form-control" placeholder="username" >
@@ -67,7 +74,7 @@
                                 <input type="checkbox">Remember Me
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn float-end login_btn" href="index.php">Login</button>
+                                <button type="submit" class="btn float-end login_btn">Login</button>
                             </div>
                         </form>
                     </div>
