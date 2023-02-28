@@ -52,22 +52,22 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form>
+                        <form action="authecation.php" method="post">
                             <div class="input-group mb-3">
-                                <span class="input-group-text" id="txtUser"><i class="fas fa-user"></i></span>
-                                <input type="text" class="form-control" placeholder="username" >
+                                <span class="input-group-text" id="txtUser" ><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" placeholder="username" name ="username">
                             </div>
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="txtPass"><i class="fas fa-key"></i></span>
-                                <input type="text" class="form-control" placeholder="password" >
+                                <input type="text" class="form-control" placeholder="password" name ="password">
                             </div>
                             
                             <div class="row align-items-center remember">
                                 <input type="checkbox">Remember Me
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn float-end login_btn" href="index.php">Login</button>
+                                <button type="submit" class="btn float-end login_btn">Login</button>
                             </div>
                         </form>
                     </div>
