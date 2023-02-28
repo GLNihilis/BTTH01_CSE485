@@ -51,7 +51,6 @@
                             <span><i class="fab fa-twitter-square"></i></span>
                         </div>
                     </div>
-
                     <div class="card-body">
                         <form action="authecation.php" method="post">
                             <div class="input-group mb-3">
