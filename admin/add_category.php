@@ -42,6 +42,7 @@
         </nav>
 
     </header>
+    
     <main class="container mt-5 mb-5">
         <!-- <h3 class="text-center text-uppercase mb-3 text-primary">CẢM NHẬN VỀ BÀI HÁT</h3> -->
         <div class="row">
@@ -59,11 +60,29 @@
                     </div>
                 </form>
             </div>
-        </div>
+        </div>   
     </main>
+
     <footer class="bg-white d-flex justify-content-center align-items-center border-top border-secondary  border-2" style="height:80px">
         <h4 class="text-center text-uppercase fw-bold">TLU's music garden</h4>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script>
+        const form = document.querySelector('form');
+        form.addEventListener('submit',(event)=>{
+            event.preventDefault();
+            var maTheLoai = document.querySelector('input[name="txtIDCat"]');
+            var tenTheLoai = document.querySelector('input[name="txtCatName"]');
+            if (maTheLoai.value.trim() === '') {
+                    alert('Bạn chưa nhập Mã thể loại');
+                    return;
+                }
+            if (tenTheLoai.value.trim() === '') {
+                    alert('Bạn chưa nhập Tên thể loại');
+                    return;
+                }
+            form.submit();
+        });
+    </script>
 </body>
 </html>
