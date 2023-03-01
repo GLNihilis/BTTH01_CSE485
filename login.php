@@ -1,3 +1,42 @@
+<?php
+if(isset($_GET['error'])){
+    echo "<h2 style='color:red'>{$_GET['error']}</h2>";
+}
+?>
+
+<?php
+include('./admin/config.php');
+session_start();
+$username = $password = '';
+
+try{
+    if(isset($_POST['btnLogin'])){
+        
+        if(empty($_POST["username"]) || empty($_POST["password"])){
+            $message = '<label>All fields are required</label>';
+        } else {
+            $sql = "SELECT * FROM users WHERE username = 'username' AND password = 'password'";
+            $result = $conn -> prepare($sql);
+            $result -> execute(
+                array(
+                    'username' => $_POST["username"],
+                    'password' => $_POST["password"]
+                )
+            );
+            $count = $result -> rowCount();
+            if($count > 0){
+                $_SESSION["usersname"] = $_POST["username"];
+                header("location:./admin/index.php");
+            } else {
+                header("location:login.php?error='Wrong Data'");
+            }
+        }
+    }
+} catch(PDOException $error){
+    $message = $error -> getMessage();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +91,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="authecation.php" method="post">
+                        <form action="" method="post">
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="txtUser" ><i class="fas fa-user"></i></span>
                                 <input type="text" class="form-control" placeholder="username" name ="username">
@@ -67,7 +106,7 @@
                                 <input type="checkbox">Remember Me
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn float-end login_btn">Login</button>
+                                <input type="submit" class="btn float-end login_btn" name="btnLogin" value="Login"></input>
                             </div>
                         </form>
                     </div>
