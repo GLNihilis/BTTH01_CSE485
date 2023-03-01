@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 23, 2023 at 02:11 PM
+-- Generation Time: Mar 01, 2023 at 02:17 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -58,6 +58,34 @@ INSERT INTO `baiviet` (`ma_bviet`, `tieude`, `ten_bhat`, `ma_tloai`, `tomtat`, `
 (12, 'Cây và gió', 'Cây và gió', 7, 'Em và anh, hai đứa quen nhau thật tình cờ. Lời hát của anh từ bài hát “Cây và gió” đã làm tâm hồn em xao động. Nhưng sự thật phũ phàng rằng em chưa bao giờ nói cho anh biết những suy nghĩ tận sâu trong tim mình. Bởi vì em nhút nhát, em không dám đối mặt với thực tế khắc nghiệt, hay thực ra em không dám đối diện với chính mình.', NULL, 7, '2013-12-05 00:00:00', NULL),
 (13, 'Như một cách tạ ơn đời', 'Người thầy', 2, 'Ánh nắng cuối ngày rồi cũng sẽ tắt, dòng sông con đò rồi cũng sẽ rẽ sang một hướng khác. Nhưng việc trồng người luôn cảm thụ với chuyến đò ngang, cứ tần tảo đưa rồi lặng lẽ quay về đưa sang. Con đò năm xưa của Thầy nặng trĩu yêu thương, hy sinh thầm lặng.', NULL, 8, '2014-01-02 00:00:00', NULL);
 
+--
+-- Triggers `baiviet`
+--
+DELIMITER $$
+CREATE TRIGGER `tg_SuaBaiViet` AFTER UPDATE ON `baiviet` FOR EACH ROW BEGIN
+		UPDATE theloai
+    	SET SLBaiViet = (SELECT COUNT(*) FROM baiviet WHERE ma_tloai = NEW.ma_tloai)
+    	WHERE ma_tloai = NEW.ma_tloai;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tg_ThemHBaiViet` AFTER INSERT ON `baiviet` FOR EACH ROW BEGIN
+		UPDATE theloai
+    	SET SLBaiViet = (SELECT COUNT(*) FROM baiviet WHERE ma_tloai = NEW.ma_tloai)
+    	WHERE ma_tloai = NEW.ma_tloai;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `tg_XoaBaiViet` AFTER DELETE ON `baiviet` FOR EACH ROW BEGIN
+		UPDATE theloai
+        SET SLBaiViet = (SELECT COUNT(*) FROM baiviet WHERE ma_tloai = OLD.ma_tloai)
+        WHERE ma_tloai = OLD.ma_tloai;
+END
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -92,22 +120,73 @@ INSERT INTO `tacgia` (`ma_tgia`, `ten_tgia`, `hinh_tgia`) VALUES
 
 CREATE TABLE `theloai` (
   `ma_tloai` int(10) UNSIGNED NOT NULL,
-  `ten_tloai` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL
+  `ten_tloai` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `SLBaiViet` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `theloai`
 --
 
-INSERT INTO `theloai` (`ma_tloai`, `ten_tloai`) VALUES
-(1, 'Nhạc trẻ'),
-(2, 'Nhạc trữ tình'),
-(3, 'Nhạc cách mạng'),
-(4, 'Nhạc thiếu nhi'),
-(5, 'Nhạc quê hương'),
-(6, 'POP'),
-(7, 'Rock'),
-(8, 'R&B');
+INSERT INTO `theloai` (`ma_tloai`, `ten_tloai`, `SLBaiViet`) VALUES
+(1, 'Nhạc trẻ', 0),
+(2, 'Nhạc trữ tình', 0),
+(3, 'Nhạc cách mạng', 0),
+(4, 'Nhạc thiếu nhi', 0),
+(5, 'Nhạc quê hương', 0),
+(6, 'POP', 0),
+(7, 'Rock', 0),
+(8, 'R&B', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `uid` int(11) NOT NULL,
+  `user` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pass` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`uid`, `user`, `pass`) VALUES
+(1, 'admin', '123'),
+(2, 'cse485', '123'),
+(3, 'user', 'abc');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `vw_music`
+-- (See below for the actual view)
+--
+CREATE TABLE `vw_music` (
+`ma_bviet` int(10) unsigned
+,`tieude` varchar(200)
+,`ten_bhat` varchar(100)
+,`ma_tloai` int(10) unsigned
+,`tomtat` text
+,`noidung` text
+,`ma_tgia` int(10) unsigned
+,`ngayviet` datetime
+,`hinhanh` varchar(200)
+,`ten_tloai` varchar(50)
+,`ten_tgia` varchar(100)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `vw_music`
+--
+DROP TABLE IF EXISTS `vw_music`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_music`  AS SELECT `baiviet`.`ma_bviet` AS `ma_bviet`, `baiviet`.`tieude` AS `tieude`, `baiviet`.`ten_bhat` AS `ten_bhat`, `baiviet`.`ma_tloai` AS `ma_tloai`, `baiviet`.`tomtat` AS `tomtat`, `baiviet`.`noidung` AS `noidung`, `baiviet`.`ma_tgia` AS `ma_tgia`, `baiviet`.`ngayviet` AS `ngayviet`, `baiviet`.`hinhanh` AS `hinhanh`, `theloai`.`ten_tloai` AS `ten_tloai`, `tacgia`.`ten_tgia` AS `ten_tgia` FROM ((`baiviet` join `theloai` on(`baiviet`.`ma_tloai` = `theloai`.`ma_tloai`)) join `tacgia` on(`baiviet`.`ma_tgia` = `tacgia`.`ma_tgia`))  ;
 
 --
 -- Indexes for dumped tables
@@ -134,6 +213,13 @@ ALTER TABLE `theloai`
   ADD PRIMARY KEY (`ma_tloai`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`uid`),
+  ADD UNIQUE KEY `username` (`user`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -142,6 +228,12 @@ ALTER TABLE `theloai`
 --
 ALTER TABLE `tacgia`
   MODIFY `ma_tgia` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

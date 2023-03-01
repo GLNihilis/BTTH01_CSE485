@@ -1,39 +1,34 @@
 <?php
-if(isset($_GET['error'])){
-    echo "<h2 style='color:red'>{$_GET['error']}</h2>";
+if(isset($_GET['error']))
+{
+    echo "<p style='color:red'>{$_GET['error']}</p>";
 }
 ?>
 
 <?php
-include('./admin/config.php');
 session_start();
-$username = $password = '';
 
-try{
-    if(isset($_POST['btnLogin'])){
-        
-        if(empty($_POST["username"]) || empty($_POST["password"])){
-            $message = '<label>All fields are required</label>';
+if(isset($_POST['btnLogin']))
+{
+    if(empty($_POST["username"]) || empty($_POST["password"]))
+    {
+        $message = '<label>All fields are required</label>';
+    }
+    else
+    {
+        $conn = mysqli_connect('localhost', 'root', '', 'btth01_cse485');
+        $sql = "SELECT * FROM users WHERE user = 'username' AND pass = 'password'";
+        $result = mysqli_query($conn, $sql);
+
+        $count = mysqli_num_rows($result);
+        if($count == 1)
+        {
+            $_SESSION["username"] = $_POST["username"];
+            header("location:admin/index.php");
         } else {
-            $sql = "SELECT * FROM users WHERE username = 'username' AND password = 'password'";
-            $result = $conn -> prepare($sql);
-            $result -> execute(
-                array(
-                    'username' => $_POST["username"],
-                    'password' => $_POST["password"]
-                )
-            );
-            $count = $result -> rowCount();
-            if($count > 0){
-                $_SESSION["usersname"] = $_POST["username"];
-                header("location:./admin/index.php");
-            } else {
-                header("location:login.php?error='Wrong Data'");
-            }
+            header("location:login.php?error=' Wrong Data '");
         }
     }
-} catch(PDOException $error){
-    $message = $error -> getMessage();
 }
 ?>
 
