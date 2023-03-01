@@ -1,3 +1,37 @@
+<?php
+if(isset($_GET['error']))
+{
+    echo "<p style='color:red'>{$_GET['error']}</p>";
+}
+?>
+
+<?php
+session_start();
+
+if(isset($_POST['btnLogin']))
+{
+    if(empty($_POST["username"]) || empty($_POST["password"]))
+    {
+        $message = '<label>All fields are required</label>';
+    }
+    else
+    {
+        $conn = mysqli_connect('localhost', 'root', '', 'btth01_cse485');
+        $sql = "SELECT * FROM users WHERE user = 'username' AND pass = 'password'";
+        $result = mysqli_query($conn, $sql);
+
+        $count = mysqli_num_rows($result);
+        if($count == 1)
+        {
+            $_SESSION["username"] = $_POST["username"];
+            header("location:admin/index.php");
+        } else {
+            header("location:login.php?error=' Wrong Data '");
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,22 +86,22 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form>
+                        <form action="" method="post">
                             <div class="input-group mb-3">
-                                <span class="input-group-text" id="txtUser"><i class="fas fa-user"></i></span>
-                                <input type="text" class="form-control" placeholder="username" >
+                                <span class="input-group-text" id="txtUser" ><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" placeholder="username" name ="username">
                             </div>
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="txtPass"><i class="fas fa-key"></i></span>
-                                <input type="text" class="form-control" placeholder="password" >
+                                <input type="text" class="form-control" placeholder="password" name ="password">
                             </div>
                             
                             <div class="row align-items-center remember">
                                 <input type="checkbox">Remember Me
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn float-end login_btn" href="index.php">Login</button>
+                                <input type="submit" class="btn float-end login_btn" name="btnLogin" value="Login"></input>
                             </div>
                         </form>
                     </div>
