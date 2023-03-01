@@ -10,6 +10,8 @@ session_start();
 
 if(isset($_POST['btnLogin']))
 {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
     if(empty($_POST["username"]) || empty($_POST["password"]))
     {
         $message = '<label>All fields are required</label>';
@@ -17,7 +19,7 @@ if(isset($_POST['btnLogin']))
     else
     {
         $conn = mysqli_connect('localhost', 'root', '', 'btth01_cse485');
-        $sql = "SELECT * FROM users WHERE user = 'username' AND pass = 'password'";
+        $sql = "SELECT * FROM users WHERE user = '$username' AND pass = '$password'";
         $result = mysqli_query($conn, $sql);
 
         $count = mysqli_num_rows($result);

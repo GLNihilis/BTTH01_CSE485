@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 01, 2023 at 02:17 PM
+-- Generation Time: Mar 01, 2023 at 07:49 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -145,7 +145,6 @@ INSERT INTO `theloai` (`ma_tloai`, `ten_tloai`, `SLBaiViet`) VALUES
 --
 
 CREATE TABLE `users` (
-  `uid` int(11) NOT NULL,
   `user` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pass` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -154,10 +153,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`uid`, `user`, `pass`) VALUES
-(1, 'admin', '123'),
-(2, 'cse485', '123'),
-(3, 'user', 'abc');
+INSERT INTO `users` (`user`, `pass`) VALUES
+('admin', '123'),
+('cse485', '123'),
+('user', 'abc');
 
 -- --------------------------------------------------------
 
@@ -216,8 +215,7 @@ ALTER TABLE `theloai`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`uid`),
-  ADD UNIQUE KEY `username` (`user`);
+  ADD PRIMARY KEY (`user`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -228,12 +226,6 @@ ALTER TABLE `users`
 --
 ALTER TABLE `tacgia`
   MODIFY `ma_tgia` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
